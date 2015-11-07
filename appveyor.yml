@@ -1,0 +1,27 @@
+version: 1.0.{build}
+configuration: Release
+
+init:
+- if "%APPVEYOR_REPO_NAME%" == "JeremyAnsel/XwaCbmEditor" if "%APPVEYOR_REPO_BRANCH%"=="master" if not defined APPVEYOR_PULL_REQUEST_NUMBER set DEPLOY=True
+
+assembly_info:
+  patch: true
+  file: '**\AssemblyInfo.*'
+  assembly_version: 1.0.0
+  assembly_file_version: '{version}'
+  assembly_informational_version: '{version}'
+
+before_build:
+- nuget restore XwaCbmEditor\XwaCbmEditor.sln
+
+build:
+  project: XwaCbmEditor\XwaCbmEditor.sln
+  verbosity: minimal
+
+after_build:
+- XwaCbmEditor\build-dist.cmd
+
+artifacts:
+- path: XwaCbmEditor\dist
+  name: XwaCbmEditor
+  type: zip

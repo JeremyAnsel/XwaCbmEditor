@@ -1,0 +1,78 @@
+﻿<Window x:Class="XwaCbmExplorer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:local="clr-namespace:XwaCbmExplorer"
+        Title="Xwa Cbm Explorer"
+        Height="500"
+        Width="800"
+        UseLayoutRounding="True">
+    <Window.CommandBindings>
+        <CommandBinding Command="ApplicationCommands.Open"
+                        Executed="ExecuteOpen" />
+    </Window.CommandBindings>
+    <xctk:BusyIndicator x:Name="BusyIndicator">
+        <DockPanel>
+            <ToolBar DockPanel.Dock="Top"
+                     ToolBarTray.IsLocked="True">
+                <Button Command="ApplicationCommands.Open">Open...</Button>
+            </ToolBar>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="3*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="2*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="6*" />
+                </Grid.ColumnDefinitions>
+                <GridSplitter Grid.Column="1"
+                              Width="5"
+                              HorizontalAlignment="Center"
+                              VerticalAlignment="Stretch" />
+                <GridSplitter Grid.Column="3"
+                              Width="5"
+                              HorizontalAlignment="Center"
+                              VerticalAlignment="Stretch" />
+                <ListBox Grid.Column="0"
+                         ItemsSource="{Binding}"
+                         DisplayMemberPath="Key"
+                         IsSynchronizedWithCurrentItem="True"
+                         VirtualizingPanel.IsVirtualizing="True"
+                         VirtualizingPanel.VirtualizationMode="Recycling" />
+                <ListBox Grid.Column="2"
+                         ItemsSource="{Binding /Value.Images}"
+                         IsSynchronizedWithCurrentItem="True"
+                         VirtualizingPanel.IsVirtualizing="True"
+                         VirtualizingPanel.VirtualizationMode="Recycling">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding Width}" />
+                                <TextBlock Text="x" />
+                                <TextBlock Text="{Binding Height}" />
+                                <TextBlock Text=" : " />
+                                <TextBlock Text="{Binding OffsetX}" />
+                                <TextBlock Text=";" />
+                                <TextBlock Text="{Binding OffsetY}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <Border Grid.Column="4">
+                    <Border.Background>
+                        <SolidColorBrush Color="{Binding SelectedColor, ElementName=ImageBackgroundColor}" />
+                    </Border.Background>
+                    <DockPanel>
+                        <xctk:ColorPicker x:Name="ImageBackgroundColor"
+                                          DockPanel.Dock="Bottom"
+                                          UsingAlphaChannel="False"
+                                          ShowStandardColors="False"
+                                          AvailableColorsSortingMode="HueSaturationBrightness"
+                                          SelectedColor="Black" />
+                        <Image Source="{Binding /Value.Images/, Converter={local:ImageConverter}}" />
+                    </DockPanel>
+                </Border>
+            </Grid>
+        </DockPanel>
+    </xctk:BusyIndicator>
+</Window>

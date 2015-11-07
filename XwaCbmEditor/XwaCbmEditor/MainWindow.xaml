@@ -1,0 +1,165 @@
+﻿<Window x:Class="XwaCbmEditor.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:local="clr-namespace:XwaCbmEditor"
+        Title="{Binding CbmFile.FileName, StringFormat='Xwa Cbm Editor {0}'}"
+        Height="500"
+        Width="800"
+        UseLayoutRounding="True">
+    <Window.CommandBindings>
+        <CommandBinding Command="ApplicationCommands.New"
+                        Executed="ExecuteNew" />
+        <CommandBinding Command="ApplicationCommands.Open"
+                        Executed="ExecuteOpen" />
+        <CommandBinding Command="ApplicationCommands.Save"
+                        Executed="ExecuteSave" />
+        <CommandBinding Command="ApplicationCommands.SaveAs"
+                        Executed="ExecuteSaveAs" />
+    </Window.CommandBindings>
+    <xctk:BusyIndicator x:Name="BusyIndicator">
+        <DockPanel>
+            <TextBlock DockPanel.Dock="Bottom"
+                       Text="{Binding CbmFile.FileName}" />
+            <ToolBar DockPanel.Dock="Top"
+                     ToolBarTray.IsLocked="True">
+                <Button Command="ApplicationCommands.New">New</Button>
+                <Button Command="ApplicationCommands.Open">Open...</Button>
+                <Button Command="ApplicationCommands.Save">Save</Button>
+                <Button Command="ApplicationCommands.SaveAs">Save As...</Button>
+            </ToolBar>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="5*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="8*" />
+                </Grid.ColumnDefinitions>
+                <GridSplitter Grid.Column="1"
+                              Width="5"
+                              HorizontalAlignment="Center"
+                              VerticalAlignment="Stretch" />
+                <DockPanel Grid.Column="0">
+                    <DockPanel.Resources>
+                        <ContextMenu x:Key="ImagesContextMenu">
+                            <MenuItem Header="Replace with..."
+                                      Click="ReplaceImage_Click"
+                                      IsEnabled="{Binding HasItems, Source={x:Reference ImagesList}}" />
+                            <MenuItem Header="Save As..."
+                                      Click="SaveImage_Click"
+                                      IsEnabled="{Binding HasItems, Source={x:Reference ImagesList}}" />
+                        </ContextMenu>
+                    </DockPanel.Resources>
+                    <TextBlock DockPanel.Dock="Top"
+                               Text="Images" />
+                    <ToolBarTray DockPanel.Dock="Bottom"
+                                 IsLocked="True">
+                        <ToolBar Band="0"
+                                 BandIndex="0"
+                                 IsEnabled="{Binding ElementName=ImagesList, Path=HasItems}">
+                            <Button Click="SetImageColorKey_Click">Make transparent:</Button>
+                            <xctk:ColorPicker x:Name="DatImageColorKey"
+                                              Width="80"
+                                              UsingAlphaChannel="False"
+                                              ShowStandardColors="False"
+                                              AvailableColorsSortingMode="HueSaturationBrightness"
+                                              SelectedColor="Black" />
+                        </ToolBar>
+                        <ToolBar Band="1"
+                                 BandIndex="0"
+                                 IsEnabled="{Binding ElementName=ImagesList, Path=HasItems}">
+                            <Button Click="SetImageColorKeyRange_Click">Make transparent:</Button>
+                            <xctk:ColorPicker x:Name="DatImageColorKey0"
+                                              Width="80"
+                                              UsingAlphaChannel="False"
+                                              ShowStandardColors="False"
+                                              AvailableColorsSortingMode="HueSaturationBrightness"
+                                              SelectedColor="Black" />
+                            <TextBlock Text=" to " />
+                            <xctk:ColorPicker x:Name="DatImageColorKey1"
+                                              Width="80"
+                                              UsingAlphaChannel="False"
+                                              ShowStandardColors="False"
+                                              AvailableColorsSortingMode="HueSaturationBrightness"
+                                              SelectedColor="Black" />
+                        </ToolBar>
+                        <ToolBar Band="2"
+                                 BandIndex="0">
+                            <Button Click="NewImage_Click">New</Button>
+                            <Button Click="AddImage_Click">Add...</Button>
+                            <Button Click="ReplaceImage_Click"
+                                    IsEnabled="{Binding ElementName=ImagesList, Path=HasItems}">Replace with...</Button>
+                        </ToolBar>
+                        <ToolBar Band="3"
+                                 BandIndex="0"
+                                 IsEnabled="{Binding ElementName=ImagesList, Path=HasItems}">
+                            <Button Click="DeleteImage_Click">Delete</Button>
+                            <Button Click="SaveImage_Click">Save As...</Button>
+                        </ToolBar>
+                    </ToolBarTray>
+                    <Grid DockPanel.Dock="Bottom">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0"
+                                   Grid.Column="0"
+                                   Text="Offset X: " />
+                        <TextBox Grid.Row="0"
+                                 Grid.Column="1"
+                                 Text="{Binding CbmFile.Images/OffsetX, UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBlock Grid.Row="1"
+                                   Grid.Column="0"
+                                   Text="Offset Y: " />
+                        <TextBox Grid.Row="1"
+                                 Grid.Column="1"
+                                 Text="{Binding CbmFile.Images/OffsetY, UpdateSourceTrigger=PropertyChanged}" />
+                    </Grid>
+                    <ListView x:Name="ImagesList"
+                              SelectionMode="Single"
+                              ItemsSource="{Binding CbmFile.Images}"
+                              IsSynchronizedWithCurrentItem="True"
+                              VirtualizingPanel.IsVirtualizing="True"
+                              VirtualizingPanel.VirtualizationMode="Recycling"
+                              ContextMenu="{StaticResource ImagesContextMenu}">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Width"
+                                                DisplayMemberBinding="{Binding Width}" />
+                                <GridViewColumn Header="Height"
+                                                DisplayMemberBinding="{Binding Height}" />
+                                <GridViewColumn Header="Offset">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="{Binding OffsetX}" />
+                                                <TextBlock Text="," />
+                                                <TextBlock Text="{Binding OffsetY}" />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </DockPanel>
+                <DockPanel Grid.Column="2">
+                    <DockPanel.Background>
+                        <SolidColorBrush Color="{Binding SelectedColor, ElementName=ImageBackgroundColor}" />
+                    </DockPanel.Background>
+                    <xctk:ColorPicker x:Name="ImageBackgroundColor"
+                                      DockPanel.Dock="Bottom"
+                                      UsingAlphaChannel="False"
+                                      ShowStandardColors="False"
+                                      AvailableColorsSortingMode="HueSaturationBrightness"
+                                      SelectedColor="Black" />
+                    <Image Source="{Binding CbmFile.Images/, Converter={local:ImageConverter}}"
+                           MouseDown="Image_MouseDown" />
+                </DockPanel>
+            </Grid>
+        </DockPanel>
+    </xctk:BusyIndicator>
+</Window>
