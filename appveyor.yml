@@ -23,5 +23,5 @@ after_build:
 
 artifacts:
 - path: XwaCbmEditor\dist
-  name: XwaCbmEditor
+  name: XwaCbmEditor-$(APPVEYOR_BUILD_VERSION)
   type: zip
