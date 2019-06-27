@@ -48,7 +48,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="JeremyAnsel.Xwa.Cbm, Version=1.0.0.0, Culture=neutral, PublicKeyToken=eea5fdd1492647b1, processorArchitecture=MSIL">
-      <HintPath>..\packages\JeremyAnsel.Xwa.Cbm.1.0.5\lib\net40\JeremyAnsel.Xwa.Cbm.dll</HintPath>
+      <HintPath>..\packages\JeremyAnsel.Xwa.Cbm.1.0.6\lib\net40\JeremyAnsel.Xwa.Cbm.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
