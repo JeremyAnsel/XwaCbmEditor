@@ -128,6 +128,7 @@ namespace XwaCbmEditor
             {
                 try
                 {
+                    cbm.Decompress();
                     cbm.Save(cbm.FileName);
 
                     disp(() => this.CbmFile = cbm);
@@ -169,6 +170,7 @@ namespace XwaCbmEditor
             {
                 try
                 {
+                    cbm.Decompress();
                     cbm.Save(fileName);
                     disp(() => this.CbmFile = cbm);
                 }
