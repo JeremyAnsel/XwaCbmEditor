@@ -213,14 +213,9 @@ namespace XwaCbmEditor
             dialog.CheckFileExists = true;
             dialog.DefaultExt = ".png";
             dialog.Filter = "Images (*.png, *.bmp, *.jpg)|*.png;*.bmp;*.jpg|PNG files (*.png)|*.png|BMP files (*.bmp)|*.bmp|JPG files (*.jpg)|*.jpg";
+            dialog.Multiselect = true;
 
-            string fileName;
-
-            if (dialog.ShowDialog(this) == true)
-            {
-                fileName = dialog.FileName;
-            }
-            else
+            if (dialog.ShowDialog(this) == false)
             {
                 return;
             }
@@ -229,9 +224,12 @@ namespace XwaCbmEditor
             {
                 try
                 {
-                    var image = CbmImage.FromFile(fileName);
+                    for (int i = 0; i < dialog.FileNames.Length; i++)
+                    {
+                        var image = CbmImage.FromFile(dialog.FileNames[i]);
 
-                    cbm.Images.Add(image);
+                        cbm.Images.Add(image);
+                    }
 
                     disp(() => this.CbmFile = this.CbmFile);
                     disp(() => this.ImagesList.SelectedIndex = this.ImagesList.Items.Count - 1);
