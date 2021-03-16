@@ -119,7 +119,6 @@
                                  Text="{Binding CbmFile.Images/OffsetY, UpdateSourceTrigger=PropertyChanged}" />
                     </Grid>
                     <ListView x:Name="ImagesList"
-                              SelectionMode="Single"
                               ItemsSource="{Binding CbmFile.Images}"
                               IsSynchronizedWithCurrentItem="True"
                               VirtualizingPanel.IsVirtualizing="True"

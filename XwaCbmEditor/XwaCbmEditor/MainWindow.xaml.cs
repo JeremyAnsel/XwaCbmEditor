@@ -315,24 +315,27 @@ namespace XwaCbmEditor
                 return;
             }
 
-            var image = this.ImagesList.SelectedItem as CbmImage;
+            var images = this.ImagesList.SelectedItems;
 
-            if (image == null)
+            if (images.Count == 0)
             {
                 return;
             }
 
+            CbmImage image = images[0] as CbmImage;
             var dialog = new SaveFileDialog();
             dialog.AddExtension = true;
             dialog.DefaultExt = ".png";
             dialog.Filter = "Images (*.png, *.bmp)|*.png;*.bmp|PNG files (*.png)|*.png|BMP files (*.bmp)|*.bmp";
             dialog.FileName = System.IO.Path.GetFileNameWithoutExtension(cbm.FileName) + "-" + cbm.Images.IndexOf(image);
 
-            string fileName;
+            string fileName, directory, extension;
 
             if (dialog.ShowDialog(this) == true)
             {
                 fileName = dialog.FileName;
+                directory = fileName.Substring(0, fileName.LastIndexOf('\\'));
+                extension = fileName.Substring(fileName.LastIndexOf('.'));
             }
             else
             {
@@ -341,7 +344,12 @@ namespace XwaCbmEditor
 
             this.RunBusyAction(disp =>
             {
-                image.Save(fileName);
+                string name = System.IO.Path.GetFileNameWithoutExtension(cbm.FileName);
+
+                foreach (CbmImage img in images)
+                {
+                    img.Save(directory + '\\' + name + "-" + cbm.Images.IndexOf(img) + extension);
+                }
             });
         }
 
