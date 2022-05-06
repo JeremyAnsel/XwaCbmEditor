@@ -362,7 +362,12 @@ namespace XwaCbmEditor
                 return;
             }
 
-            Color colorKey = this.DatImageColorKey.SelectedColor;
+            if (this.DatImageColorKey.SelectedColor is null)
+            {
+                return;
+            }
+
+            Color colorKey = this.DatImageColorKey.SelectedColor.Value;
 
             this.RunBusyAction(disp =>
             {
@@ -380,8 +385,13 @@ namespace XwaCbmEditor
                 return;
             }
 
-            Color colorKey0 = this.DatImageColorKey0.SelectedColor;
-            Color colorKey1 = this.DatImageColorKey1.SelectedColor;
+            if (this.DatImageColorKey0.SelectedColor is null || this.DatImageColorKey1.SelectedColor is null)
+            {
+                return;
+            }
+
+            Color colorKey0 = this.DatImageColorKey0.SelectedColor.Value;
+            Color colorKey1 = this.DatImageColorKey1.SelectedColor.Value;
 
             this.RunBusyAction(disp =>
             {
