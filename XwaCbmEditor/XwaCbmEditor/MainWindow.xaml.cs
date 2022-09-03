@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -101,6 +102,21 @@ namespace XwaCbmEditor
                 {
                     var cbm = CbmFile.FromFile(fileName);
                     disp(() => this.CbmFile = cbm);
+
+                    if (cbm.Images.Count != 0)
+                    {
+                        var image = cbm.Images[0];
+                        var palette = image.GetPalette32();
+                        uint color = palette?[0] ?? 0;
+                        byte b = (byte)((color >> 16) & 0xffU);
+                        byte g = (byte)((color >> 8) & 0xffU);
+                        byte r = (byte)(color & 0xffU);
+
+                        disp(() =>
+                        {
+                            this.ImageBackgroundColor.SelectedColor = Color.FromRgb(r, g, b);
+                        });
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -124,10 +140,13 @@ namespace XwaCbmEditor
                 return;
             }
 
+            Color color = this.ImageBackgroundColor.SelectedColor ?? Colors.Black;
+
             this.RunBusyAction(disp =>
             {
                 try
                 {
+                    SetCbmBackgroundColor(cbm, color);
                     cbm.Decompress();
                     cbm.Save(cbm.FileName);
 
@@ -166,10 +185,13 @@ namespace XwaCbmEditor
                 return;
             }
 
+            Color color = this.ImageBackgroundColor.SelectedColor ?? Colors.Black;
+
             this.RunBusyAction(disp =>
             {
                 try
                 {
+                    SetCbmBackgroundColor(cbm, color);
                     cbm.Decompress();
                     cbm.Save(fileName);
                     disp(() => this.CbmFile = cbm);
@@ -179,6 +201,24 @@ namespace XwaCbmEditor
                     disp(() => MessageBox.Show(this, ex.Message, this.Title, MessageBoxButton.OK, MessageBoxImage.Error));
                 }
             });
+        }
+
+        private void SetCbmBackgroundColor(CbmFile cbm, Color color)
+        {
+            uint backgroundColor = (uint)((color.B << 16) | (color.G << 8) | color.R);
+
+            foreach (var image in cbm.Images)
+            {
+                var palette = image.GetPalette32();
+
+                if (palette == null)
+                {
+                    continue;
+                }
+
+                palette[0] = backgroundColor;
+                image.SetPalette(palette);
+            }
         }
 
         private void NewImage_Click(object sender, RoutedEventArgs e)
