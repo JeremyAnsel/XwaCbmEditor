@@ -264,10 +264,14 @@ namespace XwaCbmEditor
             {
                 try
                 {
-                    for (int i = 0; i < dialog.FileNames.Length; i++)
-                    {
-                        var image = CbmImage.FromFile(dialog.FileNames[i]);
+                    var images = dialog.FileNames
+                    .AsParallel()
+                    .AsOrdered()
+                    .Select(fileName => CbmImage.FromFile(fileName))
+                    .AsSequential();
 
+                    foreach (var image in images)
+                    {
                         cbm.Images.Add(image);
                     }
 
