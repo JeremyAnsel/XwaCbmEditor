@@ -16,6 +16,10 @@
             <ToolBar DockPanel.Dock="Top"
                      ToolBarTray.IsLocked="True">
                 <Button Command="ApplicationCommands.Open">Open...</Button>
+                <Button x:Name="editButton"
+                        Content="Edit..."
+                        Tag="{Binding /Value}"
+                        Click="EditButton_Click" />
             </ToolBar>
             <Grid>
                 <Grid.ColumnDefinitions>

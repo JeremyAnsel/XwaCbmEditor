@@ -22,6 +22,13 @@ namespace XwaCbmEditor
 
             this.DataContext = this;
             this.ExecuteNew(null, null);
+
+            string[] args = Environment.GetCommandLineArgs();
+
+            if (args.Length > 1)
+            {
+                this.OpenFile(args[1]);
+            }
         }
 
         private static readonly DependencyProperty CbmFileProperty = DependencyProperty.Register("CbmFile", typeof(CbmFile), typeof(MainWindow));
@@ -96,6 +103,11 @@ namespace XwaCbmEditor
                 return;
             }
 
+            this.OpenFile(fileName);
+        }
+
+        private void OpenFile(string fileName)
+        {
             this.RunBusyAction(disp =>
             {
                 try

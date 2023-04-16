@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -87,6 +89,46 @@ namespace XwaCbmExplorer
                     disp(() => MessageBox.Show(this, ex.Message, this.Title, MessageBoxButton.OK, MessageBoxImage.Error));
                 }
             });
+        }
+
+        private void EditButton_Click(object sender, RoutedEventArgs e)
+        {
+            var element = (FrameworkElement)sender;
+
+            if (element.Tag is not CbmFile file)
+            {
+                return;
+            }
+
+            string toolPath = GetToolDirectory("XwaCbmEditor");
+
+            if (toolPath is null)
+            {
+                return;
+            }
+
+            Process.Start(toolPath, $"\"{file.FileName}\"");
+        }
+
+        private static string GetToolDirectory(string toolName)
+        {
+            if (File.Exists(toolName + ".exe"))
+            {
+                return toolName + ".exe";
+            }
+
+            string[] directories = Environment.CurrentDirectory.Split(Path.DirectorySeparatorChar);
+            directories[directories.Length - 4] = toolName;
+
+            string directory = string.Join(Path.DirectorySeparatorChar.ToString(), directories);
+            string toolPath = directory + Path.DirectorySeparatorChar + toolName + ".exe";
+
+            if (File.Exists(toolPath))
+            {
+                return toolPath;
+            }
+
+            return null;
         }
     }
 }
