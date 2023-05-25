@@ -400,11 +400,18 @@ namespace XwaCbmEditor
 
             this.RunBusyAction(disp =>
             {
-                string name = System.IO.Path.GetFileNameWithoutExtension(cbm.FileName);
-
-                foreach (CbmImage img in images)
+                if (images.Count == 1)
                 {
-                    img.Save(directory + '\\' + name + "-" + cbm.Images.IndexOf(img) + extension);
+                    image.Save(fileName);
+                }
+                else
+                {
+                    string name = System.IO.Path.GetFileNameWithoutExtension(cbm.FileName);
+
+                    foreach (CbmImage img in images)
+                    {
+                        img.Save(directory + '\\' + name + "-" + cbm.Images.IndexOf(img) + extension);
+                    }
                 }
             });
         }
