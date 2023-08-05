@@ -77,6 +77,7 @@ namespace XwaCbmExplorer
                 try
                 {
                     var cbmFiles = System.IO.Directory.EnumerateFiles(directory, "*.CBM", System.IO.SearchOption.AllDirectories)
+                        .Where(t => t.EndsWith(".CBM", StringComparison.OrdinalIgnoreCase))
                         .Select(file => CbmFile.FromFile(file))
                         .ToDictionary(
                             t => string.Concat(System.IO.Path.GetFileName(System.IO.Path.GetDirectoryName(t.FileName)), "-", System.IO.Path.GetFileNameWithoutExtension(t.FileName)).ToUpperInvariant(),
