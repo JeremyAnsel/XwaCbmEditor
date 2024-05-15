@@ -75,6 +75,11 @@ namespace XwaCbmEditor
             }, dispatcherAction);
         }
 
+        private void CommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
+
         private void ExecuteNew(object sender, ExecutedRoutedEventArgs e)
         {
             this.RunBusyAction(disp =>

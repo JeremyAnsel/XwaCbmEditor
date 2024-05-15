@@ -9,13 +9,17 @@
         UseLayoutRounding="True">
     <Window.CommandBindings>
         <CommandBinding Command="ApplicationCommands.New"
-                        Executed="ExecuteNew" />
+                        Executed="ExecuteNew"
+                        CanExecute="CommandBinding_CanExecute" />
         <CommandBinding Command="ApplicationCommands.Open"
-                        Executed="ExecuteOpen" />
+                        Executed="ExecuteOpen"
+                        CanExecute="CommandBinding_CanExecute" />
         <CommandBinding Command="ApplicationCommands.Save"
-                        Executed="ExecuteSave" />
+                        Executed="ExecuteSave"
+                        CanExecute="CommandBinding_CanExecute" />
         <CommandBinding Command="ApplicationCommands.SaveAs"
-                        Executed="ExecuteSaveAs" />
+                        Executed="ExecuteSaveAs"
+                        CanExecute="CommandBinding_CanExecute" />
     </Window.CommandBindings>
     <xctk:BusyIndicator x:Name="BusyIndicator">
         <DockPanel>
