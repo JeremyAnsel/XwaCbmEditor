@@ -12,8 +12,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DotNetProjects.Extended.Wpf.Toolkit" Version="5.0.103" />
-    <PackageReference Include="JeremyAnsel.Xwa.Cbm" Version="3.0.16" />
+    <PackageReference Include="DotNetProjects.Extended.Wpf.Toolkit" Version="5.0.115" />
+    <PackageReference Include="JeremyAnsel.Xwa.Cbm" Version="3.0.19" />
   </ItemGroup>
 
 </Project>
